@@ -8,9 +8,9 @@ function engine_init {
   canvas_line 0 130 130 130
   canvas_line 130 130 130 0
   canvas_line 130 0 0 0
-  canvas_display_pgm arch.pgm 15 15
+  canvas_display_pgm "$1" 15 15
 }
 
-engine_init
+engine_init "${1:-arch.pgm}"
 tput cup 0 0
 canvas_draw
