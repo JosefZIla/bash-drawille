@@ -110,6 +110,38 @@ function canvas_line {
   done
 }
 
+# https://www.geeksforgeeks.org/bresenhams-circle-drawing-algorithm/
+function canvas_circle { # x_center,y_center,radius
+  function draw_circle_octant() { # x_center, y_center, x, y
+    [[ -z "$5" ]] && draw="canvas_set" || draw="canvas_unset"
+    $draw $(($1+$3)) $(($2+$4))
+    $draw $(($1-$3)) $(($2+$4))
+    $draw $(($1+$3)) $(($2-$4))
+    $draw $(($1-$3)) $(($2-$4))
+    $draw $(($1+$4)) $(($2+$3))
+    $draw $(($1-$4)) $(($2+$3))
+    $draw $(($1+$4)) $(($2-$3))
+    $draw $(($1-$4)) $(($2-$3))
+  }
+  ((
+    x=0,
+    y=$3,
+    d=3-2*$3
+  ))
+  while ((y>=x)); do
+    if ((d>0)); then
+      ((
+        y--,
+        d=d+4*(x-y)+10
+      ))
+    else
+        let d=d+4*x+6
+    fi
+    let x++
+    draw_circle_octant $1 $2 $x $y $4
+  done
+}
+
 function canvas_display_pgm {
   exec 3<$1
   read magic <&3
